@@ -1,0 +1,52 @@
+package packetformat
+
+author  joern.schumacher@cern.ch
+manager joern.schumacher@cern.ch
+
+
+use TDAQPolicy
+use asyncmsg
+
+
+### Library ##########################################################################
+
+library netio " \
+    libevent/libevent_datasink.cpp \
+    libevent/libevent_datasource.cpp \
+    libevent/libevent_utility.cpp \
+    posix/posix_datasource.cpp \
+    posix/posix_datasink.cpp \
+    netio.cpp \
+    message.cpp \
+    serialization.cpp"
+
+
+### Test Applications ################################################################
+
+application netio_datagen main_netio_datagen.cpp
+macro_append netio_datagenlinkopts "-lnetio -lasyncmsg  -l:/usr/local/lib/libevent.a -l:/usr/local/lib/libevent_pthreads.a"
+macro_append netio_datagendependencies "netio"
+macro_append netio_datagen_cflags      "-pg"
+#
+application netio_server main_netio_server.cpp
+macro_append netio_serverlinkopts "-lnetio -lasyncmsg  -l:/usr/local/lib/libevent.a -l:/usr/local/lib/libevent_pthreads.a"
+macro_append netio_serverdependencies "netio"
+
+
+### Installation #####################################################################
+
+apply_pattern install_headers src_dir="../netio"  files="*.h *.hpp" 
+#apply_pattern install_headers src_dir="../netio/libevent" target_dir="libevent" files="*.h *.hpp" 
+apply_pattern install_headers src_dir="../netio/posix" target_dir="posix" files="*.h *.hpp" 
+
+
+apply_pattern install_libs files="libnetio.so"
+
+apply_pattern install_apps files="netio_server_rc netio_server netio_datagen"
+
+
+### Unit Tests #######################################################################
+
+application test ../test/test_*.cpp
+macro_append testlinkopts "-lnetio -lasyncmsg  -l:/usr/local/lib/libevent.a -l:/usr/local/lib/libevent_pthreads.a"
+macro_append testdependencies "netio"

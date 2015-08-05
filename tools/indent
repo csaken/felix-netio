@@ -1,0 +1,12 @@
+#!/bin/bash
+
+find . \( -iname "*\.cpp" -or -iname "*\.hpp" \) \
+    -and -not \( -iwholename ./build\* -or -iwholename ./cibuild/\* \) \
+    -exec \
+        astyle --style=gnu --indent=spaces=2  \
+    	       --max-code-length=100 --break-after-logical \
+	       --keep-one-line-statements \
+	       --close-templates \
+	       --max-instatement-indent=60 \
+               -Q --suffix=none {} \;
+

@@ -1,0 +1,8 @@
+Makefile
+cleanup.csh
+cleanup.sh
+inst_files.noarch.head.auto.
+inst_files.noarch.headers.
+inst_files.x86_64-slc6-gcc47-opt.libs.
+setup.csh
+setup.sh
